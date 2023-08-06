@@ -1,5 +1,7 @@
 package LinkedList;
 
+import java.util.Stack;
+
 public class LinkedList {
     public static class Node {
         int data;
@@ -193,7 +195,6 @@ public class LinkedList {
         }
         return entry;
     }
-
     public Node intersectionPoint(Node headA, Node headB) {
         int c1 = findSize(headA);
         int c2 = findSize(headB);
@@ -217,4 +218,173 @@ public class LinkedList {
         }
         return null;
     }
+    public void alternateSplit(Node head) {
+        Node headA, headB, nxt;
+        headA = head;
+        if(head==null || head.next==null) {
+            headB = null;
+            return;
+        }
+        headB = head.next;
+        Node curr = head;
+        while(curr.next!=null) {
+            nxt = curr.next;
+            curr.next = curr.next.next;
+            curr = nxt;
+        }
+    }
+    public Node mergeTwoLL(Node headA, Node headB) {
+        if(headA == null)
+            return headB;
+        if(headB == null)
+            return headA;
+
+        Node head;
+        if(headA.data<= headB.data) {
+            head = headA;
+            headA = headA.next;
+        } else {
+            head = headB;
+            headB = headB.next;
+        }
+
+        Node curr = head;
+        while(headA!=null && headB!=null) {
+            if(headA.data<= headB.data) {
+                curr.next = headA;
+                headA = headA.next;
+            } else {
+                curr.next = headB;
+                headB = headB.next;
+            }
+            curr =curr.next;
+        }
+
+        while(headA!=null) {
+            curr.next = headA;
+            headA = headA.next;
+            curr = curr.next;
+        }
+
+        while(headB!=null) {
+            curr.next = headB;
+            headB = headB.next;
+            curr = curr.next;
+        }
+
+        return head;
+    }
+    private int[] convertToArray(Node head, int n) {
+        int[] arr = new int[n];
+        int i=0;
+        while(head!=null) {
+            arr[i++] = head.data;
+            head = head.next;
+        }
+        return arr;
+    }
+    public int[] nextLargerElement(Node head) {
+        int n = findSize(head);
+        int[] arr = convertToArray(head, n);
+
+        Stack<Integer> stack = new Stack<>();
+        int[] nextGreater = new int[n];
+
+        for(int i=0;i<n;i++) {
+
+            while(!stack.isEmpty() && arr[i] > arr[stack.peek()]) {
+                nextGreater[stack.peek()] = arr[i];
+                stack.pop();
+            }
+            stack.push(i);
+        }
+
+        return nextGreater;
+    }
+    public Node addTwoNumbers(Node l1, Node l2) {
+        l1 = reverseIterative(l1);
+        l2 = reverseIterative(l2);
+
+        if(l1==null)
+            return l2;
+        if(l2==null)
+            return l1;
+
+        int sum, val,carryOver =0;
+        Node head =null, curr = null;
+        while (l1!=null && l2!=null) {
+            sum = l1.data + l2.data + carryOver;
+            val = sum%10;
+            carryOver = sum/10;
+            if(head==null) {
+                head = new Node(val);
+                curr = head;
+            } else {
+                curr.next = new Node(val);
+                curr = curr.next;
+            }
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+
+        while(l1!=null) {
+            sum = l1.data + carryOver;
+            val = sum%10;
+            carryOver = sum/10;
+            curr.next = new Node(val);
+            l1 = l1.next;
+            curr = curr.next;
+        }
+
+        while(l2!=null) {
+            sum = l2.data + carryOver;
+            val = sum%10;
+            carryOver = sum/10;
+            curr.next = new Node(val);
+            l2 = l2.next;
+            curr = curr.next;
+        }
+
+        if(carryOver!=0) {
+            curr.next = new Node(carryOver);
+        }
+
+        return head;
+    }
+
+    public Node findMiddleRevamp(Node head) {
+        Node slow =head, fast = head;
+        while(fast.next!=null && fast.next.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    public Node mergeSort(Node head) {
+        if(head==null || head.next==null) {
+            return head;
+        }
+
+        Node mid = findMiddleRevamp(head);
+        Node midNxt = mid.next;
+        mid.next = null;
+        Node firstHalf = mergeSort(head);
+        Node secondHalf = mergeSort(midNxt);
+
+        head = mergeTwoLL(firstHalf, secondHalf);
+
+        return head;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

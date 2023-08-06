@@ -40,8 +40,8 @@ public class LLMain {
         LinkedList.Node head = createSingleLL(arr);
 
         LinkedList linkedList = new LinkedList();
-        LinkedList.Node middleNode = linkedList.detectCycle(head);
-        System.out.println(middleNode.data);
-        //linkedList.traverseIterative(head1);
+        LinkedList.Node head1 = linkedList.mergeSort(head);
+        //System.out.println(middleNode.data);
+        linkedList.traverseIterative(head1);
     }
 }
