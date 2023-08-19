@@ -1,5 +1,7 @@
 package LinkedList;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class LinkedList {
@@ -375,6 +377,94 @@ public class LinkedList {
 
         return head;
     }
+
+    public Node rotate(Node head, int k) {
+
+        if(k==0)
+            return head;
+
+
+        Node curr = head;
+        int counter = 1;
+        while(curr!=null && counter<k) {
+            curr = curr.next;
+            counter++;
+        }
+
+        if(curr==null || curr.next==null)
+            return head;
+
+        Node KthNode = curr;
+
+        while(curr.next!=null) {
+            curr = curr.next;
+        }
+
+        curr.next = head;
+        head = KthNode.next;
+        KthNode.next = null;
+
+        return head;
+    }
+    public Node reverseKNodes(Node head, int k) {
+
+        if(head==null  || k<=1) {
+            return head;
+        }
+        Node curr = head, nxt, prev=null;
+        int counter = 1;
+        while(curr!=null && counter<=k) {
+            nxt = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nxt;
+            counter++;
+        }
+
+        head.next = reverseKNodes(curr, k);
+
+        return prev;
+    }
+
+    public Node flatten(Node head) {
+        Node curr = head;
+        Node flattenHead = null;
+        while(curr!=null) {
+            flattenHead = mergeTwoLL(flattenHead, curr);
+            curr = curr.next;
+        }
+        return head;
+    }
+
+    /*public Node copyRandomList(Node head) {
+        Map<Node, Node> map = new HashMap<>();
+        Node curr = head;
+
+        Node clonedHead = new Node(curr.data);
+        Node clonedCurr = clonedHead;
+        map.put(curr, clonedCurr);
+
+        curr = curr.next;
+        //clone a linkedList
+        while(curr!=null) {
+            Node temp = new Node(curr.data);
+            map.put(curr, temp);
+            clonedCurr.next = temp;
+
+            clonedCurr = clonedCurr.next;
+            curr = curr.next;
+        }
+
+        //update random pointer
+        while(curr!=null) {
+            map.get(curr).random = map(curr.random);
+            curr = curr.next;
+        }
+        return clonedHead;
+    }*/
+
+
+
 
 
 
